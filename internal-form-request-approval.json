@@ -1,0 +1,312 @@
+{
+  "name": "Internal Form Request Approval",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Request For Approval",
+        "formDescription": "Form request waiting for approval from the approvers",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "placeholder": "Enter Your Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Enter Your Email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Contact",
+              "placeholder": "Enter Your Contact Number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Why do you want to join us?",
+              "fieldType": "textarea",
+              "placeholder": "Submit the reason you want to join us",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -992,
+        -240
+      ],
+      "id": "b6aa468f-7344-4159-b1b5-ba82cdca1e89",
+      "name": "On form submission",
+      "webhookId": "04fc9337-e7f7-44d3-b21f-e2805ab6926e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1906034f-97de-4726-b1e9-9b1cfe3d041f",
+              "name": "Name",
+              "value": "={{ $json.Name.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "c226d8d2-a5bc-4080-9e25-ab49101b52f7",
+              "name": "Email",
+              "value": "={{ $json.Email.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "3f72ef0d-94d7-4373-a54a-e3d673de7989",
+              "name": "Contact",
+              "value": "={{ $json.Contact.toNumber() }}",
+              "type": "number"
+            },
+            {
+              "id": "650d18ae-5cc4-43fd-a7b0-57c03c018178",
+              "name": "Why do you want to join us?",
+              "value": "={{ $json['Why do you want to join us?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4ecd8aec-f1dd-4500-bca0-fdb5a1063da4",
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "4c8be6be-a795-43b9-bb66-cd5cbec37025",
+              "name": "formMode",
+              "value": "={{ $json.formMode }}",
+              "type": "string"
+            },
+            {
+              "id": "ff2bd0d3-6a0a-4667-af2e-83e21025579d",
+              "name": "$execution.id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        -240
+      ],
+      "id": "6f8e2aa4-c325-4c58-a314-25cdf3929bc4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=Hi Approver,\n\nHere's the user form details:\n\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}\nContact: {{ $json.Contact }}\nReason to join: {{ $json['Why do you want to join us?'] }}\n\nApprove: https://0d7c6c218d82.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/approve\n\nReject: https://0d7c6c218d82.ngrok-free.app/webhook-test/49c69f2d-75b3-454a-b6a3-4d8d136fb50b/reject\n\nThanks ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -240
+      ],
+      "id": "ff0fcf74-e252-4190-849b-b0fbe7fabc21",
+      "name": "Discord",
+      "webhookId": "a54cc82b-af54-4867-a098-049eb30add79",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "PADdkB0qtoXcVZyA",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cMSgNQ1D3QC0fFnbxRyVCRghDWJlczuYys5zLHNEUcc",
+          "mode": "list",
+          "cachedResultName": "Internal Approval Trigger",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cMSgNQ1D3QC0fFnbxRyVCRghDWJlczuYys5zLHNEUcc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cMSgNQ1D3QC0fFnbxRyVCRghDWJlczuYys5zLHNEUcc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Edit Fields').item.json.Name }}",
+            "Email": "={{ $('Edit Fields').item.json.Email }}",
+            "Contact": "={{ $('Edit Fields').item.json.Contact }}",
+            "Reason to join": "={{ $('Edit Fields').item.json['Why do you want to join us?'] }}",
+            "Approver name": "Saif Kamal",
+            "Time": "={{ $('Edit Fields').item.json.submittedAt }}",
+            "Id": "={{ $('Edit Fields').item.json.$execution.id }}",
+            "Status": "rejected",
+            "Webhook Url": "https://0d7c6c218d82.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/reject"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Contact",
+              "displayName": "Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason to join",
+              "displayName": "Reason to join",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Approver name",
+              "displayName": "Approver name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Webhook Url",
+              "displayName": "Webhook Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -144,
+        -240
+      ],
+      "id": "be0444dc-4ad8-4e87-8df6-a7e547eaae16",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Zt1IHqgn5E1tPwb8",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ccc0ad79-481b-44a8-85a8-0597f8280f1c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "377678d3e049bd421d156dcedd6399e1db57ae525429b757f46cef9e27b32b92"
+  },
+  "id": "XjhhU9tCGt5P0PcG",
+  "tags": []
+}
