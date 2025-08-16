@@ -105,7 +105,7 @@
     {
       "parameters": {
         "authentication": "webhook",
-        "content": "=Hi Approver,\n\nHere's the user form details:\n\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}\nContact: {{ $json.Contact }}\nReason to join: {{ $json['Why do you want to join us?'] }}\n\nApprove: https://0d7c6c218d82.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/approve\n\nReject: https://0d7c6c218d82.ngrok-free.app/webhook-test/49c69f2d-75b3-454a-b6a3-4d8d136fb50b/reject\n\nThanks ",
+        "content": "=Hi Approver,\n\nHere's the user form details:\n\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}\nContact: {{ $json.Contact }}\nReason to join: {{ $json['Why do you want to join us?'] }}\n\nApprove: https://8f714477792e.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/handle-approval?id={{ $json.$execution.id }}&action=approve\n\nReject: https://8f714477792e.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/handle-approval?id={{ $json.$execution.id }}&action=reject\n\nThanks ",
         "options": {}
       },
       "type": "n8n-nodes-base.discord",
@@ -151,8 +151,7 @@
             "Approver name": "Saif Kamal",
             "Time": "={{ $('Edit Fields').item.json.submittedAt }}",
             "Id": "={{ $('Edit Fields').item.json.$execution.id }}",
-            "Status": "rejected",
-            "Webhook Url": "https://0d7c6c218d82.ngrok-free.app/webhook-test/d03baac7-85fa-422a-9931-213e8c7d4cbe/reject"
+            "Status": "rejected"
           },
           "matchingColumns": [],
           "schema": [
@@ -238,7 +237,7 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": false
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -302,7 +301,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ccc0ad79-481b-44a8-85a8-0597f8280f1c",
+  "versionId": "b3787d9c-f665-42ef-93c8-b58d0501667b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "377678d3e049bd421d156dcedd6399e1db57ae525429b757f46cef9e27b32b92"

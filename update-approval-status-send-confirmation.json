@@ -3,36 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "path": "d03baac7-85fa-422a-9931-213e8c7d4cbe/approve",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -384,
-        -432
-      ],
-      "id": "ae667293-5400-4773-b767-fa4f624b6e13",
-      "name": "Approve Trigger",
-      "webhookId": "d03baac7-85fa-422a-9931-213e8c7d4cbe"
-    },
-    {
-      "parameters": {
-        "path": "49c69f2d-75b3-454a-b6a3-4d8d136fb50b/reject",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -384,
-        -208
-      ],
-      "id": "9a2c7329-c0f7-4ed4-a438-6fe1900f5348",
-      "name": "Reject Trigger",
-      "webhookId": "49c69f2d-75b3-454a-b6a3-4d8d136fb50b"
-    },
-    {
-      "parameters": {
         "documentId": {
           "__rl": true,
           "value": "1cMSgNQ1D3QC0fFnbxRyVCRghDWJlczuYys5zLHNEUcc",
@@ -62,8 +32,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -128,
-        -432
+        112,
+        -512
       ],
       "id": "0a2713f6-2acc-4623-b76d-9f54081e1c9f",
       "name": "Get row(s) in sheet",
@@ -93,8 +63,8 @@
         "filtersUI": {
           "values": [
             {
-              "lookupColumn": "Status",
-              "lookupValue": "approved"
+              "lookupColumn": "Id",
+              "lookupValue": "={{ $json.query.id }}"
             }
           ]
         },
@@ -105,8 +75,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -128,
-        -208
+        128,
+        -80
       ],
       "id": "86727be2-d66d-4e8e-afa2-a9e4f563e4d3",
       "name": "Get row(s) in sheet1",
@@ -114,29 +84,6 @@
         "googleSheetsOAuth2Api": {
           "id": "Zt1IHqgn5E1tPwb8",
           "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('Get row(s) in sheet').item.json.Email }}",
-        "subject": "Confirmation",
-        "message": "=Hi,\n\nYour request to join has been {{ $json.Status }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        384,
-        -432
-      ],
-      "id": "ffcb23fb-4949-4b49-98bb-6932aec4454d",
-      "name": "Send a message",
-      "webhookId": "a417c670-294b-4f93-bf7a-eba0ea3420e3",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "Ncj2GCdOt7irAx2F",
-          "name": "Gmail account"
         }
       }
     },
@@ -266,8 +213,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        128,
-        -432
+        496,
+        -352
       ],
       "id": "47d56c33-41f8-46a2-a742-ea347c672dc3",
       "name": "Update row in sheet",
@@ -275,29 +222,6 @@
         "googleSheetsOAuth2Api": {
           "id": "Zt1IHqgn5E1tPwb8",
           "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('Get row(s) in sheet1').item.json.Email }}",
-        "subject": "Confirmation",
-        "message": "=Hi,\n\nYour request to join has been {{ $json.Status }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        384,
-        -208
-      ],
-      "id": "9bc75257-f70e-4439-9ed6-d78453e4fac9",
-      "name": "Send a message1",
-      "webhookId": "a417c670-294b-4f93-bf7a-eba0ea3420e3",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "Ncj2GCdOt7irAx2F",
-          "name": "Gmail account"
         }
       }
     },
@@ -427,8 +351,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        128,
-        -208
+        496,
+        -144
       ],
       "id": "68b2299b-8034-4a46-b2a8-22e25d3ca4da",
       "name": "Update row in sheet1",
@@ -438,32 +362,105 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.Email }}",
+        "subject": "Confirmation",
+        "message": "=Hi,\n\nYour request to join has been {{ $json.Status }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        976,
+        -432
+      ],
+      "id": "ffcb23fb-4949-4b49-98bb-6932aec4454d",
+      "name": "Send Approved Confirmation",
+      "webhookId": "a417c670-294b-4f93-bf7a-eba0ea3420e3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ncj2GCdOt7irAx2F",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet1').item.json.Email }}",
+        "subject": "Confirmation",
+        "message": "=Hi,\n\nYour request to join has been {{ $json.Status }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        976,
+        -208
+      ],
+      "id": "9bc75257-f70e-4439-9ed6-d78453e4fac9",
+      "name": "Send Rejection Confirmation",
+      "webhookId": "a417c670-294b-4f93-bf7a-eba0ea3420e3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ncj2GCdOt7irAx2F",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "=d03baac7-85fa-422a-9931-213e8c7d4cbe/handle-approval",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -544,
+        -384
+      ],
+      "id": "ae667293-5400-4773-b767-fa4f624b6e13",
+      "name": "Handle Approval Trigger",
+      "webhookId": "d03baac7-85fa-422a-9931-213e8c7d4cbe"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9e7c87c-0e70-4782-ae8a-0b2e0f11f0a3",
+              "leftValue": "=approve",
+              "rightValue": "={{ $json.query.action }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        -320
+      ],
+      "id": "cf124d4d-e4b2-4b79-8714-c48ca928d7b7",
+      "name": "If"
     }
   ],
   "pinData": {},
   "connections": {
-    "Approve Trigger": {
-      "main": [
-        [
-          {
-            "node": "Get row(s) in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Reject Trigger": {
-      "main": [
-        [
-          {
-            "node": "Get row(s) in sheet1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Get row(s) in sheet": {
       "main": [
         [
@@ -490,7 +487,7 @@
       "main": [
         [
           {
-            "node": "Send a message",
+            "node": "Send Approved Confirmation",
             "type": "main",
             "index": 0
           }
@@ -501,7 +498,36 @@
       "main": [
         [
           {
-            "node": "Send a message1",
+            "node": "Send Rejection Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Approval Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) in sheet1",
             "type": "main",
             "index": 0
           }
@@ -513,7 +539,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "dec951ac-09c3-4b0d-9747-9c74e984d8fb",
+  "versionId": "ac1dd043-69dc-4f65-9bb7-a28cc58b750f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "377678d3e049bd421d156dcedd6399e1db57ae525429b757f46cef9e27b32b92"
